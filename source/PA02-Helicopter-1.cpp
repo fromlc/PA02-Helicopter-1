@@ -61,7 +61,7 @@ int main() {
     cout << "Down decreases altitude by " << ALTITUDE_DROP << " feet,\n";
     cout << "Forward flies " << DISTANCE_GAIN << " yards.\n\n";
 
-    char cmd;
+    char cmd;   // user command
 
     while (!g_crashed && getHeloCommand(cmd)) {
         doHeloCommand(cmd);
@@ -90,11 +90,12 @@ bool getHeloCommand(char& cmd) {
 //------------------------------------------------------------------------------
 bool doHeloCommand(char cmd) {
     switch (cmd) {
-    case CMD_UP: return heloUp();
-    case CMD_DOWN: return heloDown();
-    case CMD_FORWARD: return heloForward();
-    case CMD_LAND: return heloLand();
+    case CMD_UP:        return heloUp();
+    case CMD_DOWN:      return heloDown();
+    case CMD_FORWARD:   return heloForward();
+    case CMD_LAND:      return heloLand();
     }
+
     return true;
 }
 
