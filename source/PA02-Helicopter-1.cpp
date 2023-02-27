@@ -13,7 +13,7 @@ using std::cout;
 
 int main() {
 
-    Helicopter huey;
+    Helicopter h;
 
     cout << "Hello World!\n";
 }
