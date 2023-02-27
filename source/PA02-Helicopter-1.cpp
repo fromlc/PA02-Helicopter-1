@@ -60,7 +60,7 @@ int main() {
     cout << "U)p increases altitude by " << ALTITUDE_GAIN << " feet,\n";
     cout << "D)own decreases altitude by " << ALTITUDE_DROP << " feet,\n";
     cout << "F)orward flies " << DISTANCE_GAIN << " yards.\n";
-    cout << "X) lands by setting altitude to 0\n\n";
+    cout << "X)lands sets altitude to 0.\n\n";
 
     char cmd;   // user command
 
