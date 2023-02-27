@@ -28,11 +28,11 @@ constexpr int ALTITUDE_DROP = 101;
 constexpr int DISTANCE_GAIN = 100;
 
 const string APP_MENU = "U)p, D)own, F)orward, X)lands, Q)uit ? ";
-const char CMD_UP = 'U';
-const char CMD_DOWN = 'D';
-const char CMD_FORWARD = 'F';
-const char CMD_LAND = 'X';
-const char CMD_QUIT = 'Q';
+const char CMD_UP       = 'U';
+const char CMD_DOWN     = 'D';
+const char CMD_FORWARD  = 'F';
+const char CMD_LAND     = 'X';
+const char CMD_QUIT     = 'Q';
 
 //------------------------------------------------------------------------------
 // globals
@@ -57,9 +57,10 @@ void displayStatus();
 int main() {
 
     cout << "\nWelcome, helo pilot! Your Huey awaits your commands.\n\n";
-    cout << "Up increases altitude by " << ALTITUDE_GAIN << " feet,\n";
-    cout << "Down decreases altitude by " << ALTITUDE_DROP << " feet,\n";
-    cout << "Forward flies " << DISTANCE_GAIN << " yards.\n\n";
+    cout << "U)p increases altitude by " << ALTITUDE_GAIN << " feet,\n";
+    cout << "D)own decreases altitude by " << ALTITUDE_DROP << " feet,\n";
+    cout << "F)orward flies " << DISTANCE_GAIN << " yards.\n";
+    cout << "X) lands by setting altitude to 0\n\n";
 
     char cmd;   // user command
 
