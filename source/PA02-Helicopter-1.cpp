@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // PA02-Helicopter-1.cpp : app code for helicopter flight
 // 
-// Accepts commands U)p, D)own, F)orward, L)and, Q)uit
+// Accepts commands U)p, D)own, F)orward, X)lands, Q)uit
 //      - Up increases altitude by 100 feet
 //      - Down decreases altitude by 101 feet
 //      - Forward increases distance flown by 100 feet
@@ -27,6 +27,7 @@ constexpr int ALTITUDE_GAIN = 100;
 constexpr int ALTITUDE_DROP = 101;
 constexpr int DISTANCE_GAIN = 100;
 
+const string APP_MENU = "U)p, D)own, F)orward, X)lands, Q)uit ? ";
 const char CMD_UP = 'U';
 const char CMD_DOWN = 'D';
 const char CMD_FORWARD = 'F';
@@ -56,6 +57,9 @@ void displayStatus();
 int main() {
 
     cout << "\nWelcome, helo pilot! Your Huey awaits your commands.\n\n";
+    cout << "Up increases altitude by " << ALTITUDE_GAIN << " feet,\n";
+    cout << "Down decreases altitude by " << ALTITUDE_DROP << " feet,\n";
+    cout << "Forward flies " << DISTANCE_GAIN << " yards.\n\n";
 
     char cmd;
 
@@ -134,7 +138,12 @@ bool heloForward() {
 // lands
 //------------------------------------------------------------------------------
 bool heloLand() {
-    g_helo.goLand();
+    if (!g_helo.getAltitude()) {
+        cout << "You're already on the ground! ";
+    }
+    else {
+        g_helo.goLand();
+    }
     return true;
 }
 
