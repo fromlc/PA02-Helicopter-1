@@ -13,12 +13,24 @@ private:
 	int distance;
 
 public:
-	Helicopter();				// constructor
+	// constructor
+	Helicopter();
 
-	void getPos(int&, int&);	// put altitude and distance in reference params
-	void goUp(int);				// increase altitude by absolute passed value
-	void goDown(int);			// decrease altitude by absolute passed value
-	void goForward(int);		// increase distance by absolute passed value
-	void goLand();				// reset altitude to 0
+	// returns current altitude
+	int getAltitude() const;
+	// returns distance flown so far
+	int getDistance() const;
+	// puts altitude and distance in reference params
+	void getPosition(int&, int&);
+
+	// increases altitude by absolute passed value, returns current altitude
+	int goUp(int);
+	// decreases altitude by absolute passed value, returns current altitude
+	int goDown(int);
+	// increases distance by absolute passed value, returns distance flown so far
+	int goForward(int);
+	
+	// resets altitude to 0
+	void goLand();
 };
 #endif // HELICOPTER_H
