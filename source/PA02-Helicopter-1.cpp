@@ -29,11 +29,11 @@ constexpr int DISTANCE_GAIN = 100;
 constexpr int BUMPY_LANDING = -3;
 
 const string APP_MENU = "U)p, D)own, F)orward, X)lands, Q)uit ? ";
-const char CMD_UP = 'U';
-const char CMD_DOWN = 'D';
-const char CMD_FORWARD = 'F';
-const char CMD_LAND = 'X';
-const char CMD_QUIT = 'Q';
+constexpr char CMD_UP       = 'U';
+constexpr char CMD_DOWN     = 'D';
+constexpr char CMD_FORWARD  = 'F';
+constexpr char CMD_LAND     = 'X';
+constexpr char CMD_QUIT     = 'Q';
 
 //------------------------------------------------------------------------------
 // globals
@@ -189,10 +189,10 @@ void displayStatus() {
             flight::leftGround = false;
         }
         else {
-            cout << "Altitude is " << altitude << " feet,";
+            cout << "Altitude: " << altitude << " feet,";
         }
     }
-    cout << " Distance flown is " << distance << " yards.\n\n";
+    cout << " distance flown: " << distance << " yards.\n\n";
 }
 
 //------------------------------------------------------------------------------
