@@ -14,31 +14,26 @@
 #include <iostream>
 
 //------------------------------------------------------------------------------
-// using symbols
-//------------------------------------------------------------------------------
-using std::cin;
-using std::cout;
-using std::string;
-
-//------------------------------------------------------------------------------
 // constants
 //------------------------------------------------------------------------------
 constexpr int ALTITUDE_GAIN = 100;
-constexpr int ALTITUDE_DROP = 101;
-constexpr int DISTANCE_GAIN = 100;
+constexpr int ALTITUDE_DROP = 51;
+constexpr int DISTANCE_GAIN = 200;
 constexpr int BUMPY_LANDING = -3;
 
-const string APP_MENU = "U)p, D)own, F)orward, X)lands, Q)uit ? ";
-constexpr char CMD_UP       = 'U';
-constexpr char CMD_DOWN     = 'D';
+const std::string APP_MENU =
+    "A)scend, D)escend, F)orward, V)land, Q)uit ? ";
+constexpr char CMD_ASCEND   = 'A';
+constexpr char CMD_DESCEND  = 'D';
 constexpr char CMD_FORWARD  = 'F';
-constexpr char CMD_LAND     = 'X';
+constexpr char CMD_LAND     = 'V';
 constexpr char CMD_QUIT     = 'Q';
 
 //------------------------------------------------------------------------------
 // globals
 //------------------------------------------------------------------------------
-namespace flight {
+namespace fly
+{
     Helicopter helo;
     bool crashed = false;
     bool leftGround = false;
@@ -62,36 +57,45 @@ bool heloCrashed(int);
 //------------------------------------------------------------------------------
 // entry point
 //------------------------------------------------------------------------------
-int main() {
+int main() 
+{
     initFlight();
 
-    do {
-        char cmd = getPilotCommand();
-        doHeloCommand(cmd);
-        displayStatus();
-    } while (!flight::crashed && !flight::quit);
+    while (true)
+    {
+        doHeloCommand(getPilotCommand());
 
-    cout << "\nGoodbye!\n\n";
+        if (fly::crashed || fly::quit)
+            break;
+            
+        displayStatus();
+    }
+    displayStatus();
+    std::cout << "Goodbye!\n\n";
 }
 
 //------------------------------------------------------------------------------
 // displays pilot instructions, initial status
 //------------------------------------------------------------------------------
-void initFlight() {
+void initFlight() 
+{
+    std::cout << "\nWelcome! Your Huey simulation awaits.\n";
+    std::cout << "\nControl your flight with these commands:\n";
+    std::cout << "'A' increases altitude by " 
+        << ALTITUDE_GAIN << " feet,\n";
+    std::cout << "'D' decreases altitude by " 
+        << ALTITUDE_DROP << " feet,\n";
+    std::cout << "'F' flies forward " 
+        << DISTANCE_GAIN << " yards.\n";
+    std::cout << "'V' lands and your Huey can take off again.\n";
+    std::cout << "'Q' quits when you're done flying.\n\n";
 
-    cout << "\nWelcome, helo pilot! Your Huey awaits your commands.\n\n";
-    cout << "U)p increases altitude by " << ALTITUDE_GAIN << " feet,\n";
-    cout << "D)own decreases altitude by " << ALTITUDE_DROP << " feet,\n";
-    cout << "F)orward flies " << DISTANCE_GAIN << " yards.\n";
-    cout << "X)lands sets altitude to 0 but your Huey can fly again.\n";
-    cout << "Q)uit when you're done flying.\n\n";
+    std::cout << "Commands can be upper or lower case.\n\n";
 
-    cout << "Commands can be upper or lower case.\n\n";
+    std::cout << "If you drop too much altitude or quit in midair, ";
+    std::cout << "your Huey will crash!\n\n";
 
-    cout << "If you drop too much altitude or Q)uit in midair, ";
-    cout << "your Huey may crash!\n\n";
-
-    cout << "Starting simulation. ";
+    std::cout << "Starting Huey flight simulation. ";
     displayStatus();
 }
 
@@ -99,11 +103,12 @@ void initFlight() {
 // - puts user command in reference param
 // - returns false on quit command, true otherwise
 //------------------------------------------------------------------------------
-char getPilotCommand() {
-    cout << "U)p, D)own, F)orward, X)lands, Q)uit ? ";
+char getPilotCommand() 
+{
+    std::cout << APP_MENU;
 
     char cmd;
-    cin >> cmd;
+    std::cin >> cmd;
     return toupper(cmd);
 }
 
@@ -111,88 +116,107 @@ char getPilotCommand() {
 // - executes passed command
 // - returns command result: true on success, false on fail
 //------------------------------------------------------------------------------
-void doHeloCommand(char cmd) {
-    switch (cmd) {
-    case CMD_UP:        heloUp(); break;
-    case CMD_DOWN:      heloDown(); break;
+void doHeloCommand(char cmd) 
+{
+    switch (cmd) 
+    {
+    case CMD_ASCEND:    heloUp(); break;
+    case CMD_DESCEND:   heloDown(); break;
     case CMD_FORWARD:   heloForward(); break;
     case CMD_LAND:      heloLand(); break;
     case CMD_QUIT:      quitFlight(); break;
+    default:            std::cout << "Sorry, I don't know that command.\n";
     }
 }
 
 //------------------------------------------------------------------------------
 // goes up
 //------------------------------------------------------------------------------
-void heloUp() {
-    flight::helo.goUp(ALTITUDE_GAIN);
+void heloUp() 
+{
+    fly::helo.goUp(ALTITUDE_GAIN);
 }
 
 //------------------------------------------------------------------------------
 // goes down
 //------------------------------------------------------------------------------
-void heloDown() {
-    if (!flight::helo.getAltitude()) {
-        cout << "You're already on the ground! ";
-        flight::leftGround = false;
+void heloDown() 
+{
+    if (!fly::helo.getAltitude()) 
+    {
+        std::cout << "You're already on the ground! ";
+        fly::leftGround = false;
     }
-    flight::helo.goDown(ALTITUDE_DROP);
+    fly::helo.goDown(ALTITUDE_DROP);
 }
 
 //------------------------------------------------------------------------------
 // goes forward
 //------------------------------------------------------------------------------
-void heloForward() {
-    if (!flight::helo.getAltitude()) {
-        cout << "You're still on the ground. ";
+void heloForward() 
+{
+    if (!fly::helo.getAltitude()) 
+    {
+        std::cout << "You're still on the ground. ";
     }
-    else {
-        flight::helo.goForward(DISTANCE_GAIN);
+    else
+    {
+        fly::helo.goForward(DISTANCE_GAIN);
     }
 }
 
 //------------------------------------------------------------------------------
 // lands
 //------------------------------------------------------------------------------
-void heloLand() {
-    if (!flight::helo.getAltitude()) {
-        cout << "You're already on the ground! ";
+void heloLand() 
+{
+    if (!fly::helo.getAltitude()) 
+    {
+        std::cout << "You're already on the ground! ";
     }
-    else {
-        flight::helo.goLand();
+    else
+    {
+        fly::helo.goLand();
     }
 }
 
 //------------------------------------------------------------------------------
-// terminates flight with bumpy landing or crash
+// terminates flight with crash
 //------------------------------------------------------------------------------
-void quitFlight() {
-    int altitude = flight::helo.getAltitude();
- 
-    int drop = altitude / ALTITUDE_GAIN * ALTITUDE_DROP;
-    flight::helo.goDown(drop);
+void quitFlight() 
+{
 
-    flight::quit = true;
+    int altitude = fly::helo.getAltitude();
+    if (altitude > 0)
+    {
+        fly::helo.goDown(altitude - BUMPY_LANDING * 2);
+    }
+ 
+    fly::quit = true;
 }
 
 //------------------------------------------------------------------------------
 // displays helicopter status and position 
 //------------------------------------------------------------------------------
-void displayStatus() {
+void displayStatus()
+{
     int altitude, distance;
-    flight::helo.getPosition(altitude, distance);
+    fly::helo.getPosition(altitude, distance);
 
     if (!heloCrashed(altitude)) {
-        altitude = flight::helo.getAltitude();
-        if (flight::leftGround && !altitude) {
-            cout << "Nice landing ;)";
-            flight::leftGround = false;
+        altitude = fly::helo.getAltitude();
+
+        if (fly::leftGround && !altitude) 
+        {
+            std::cout << "Nice landing ;)";
+            fly::leftGround = false;
         }
-        else {
-            cout << "Altitude: " << altitude << " feet,";
+        else
+        {
+            std::cout << "Altitude: " << altitude << " feet\n";
         }
     }
-    cout << " distance flown: " << distance << " yards.\n\n";
+    std::cout << "Distance flown: " << distance << " yards.\n\n";
 }
 
 //------------------------------------------------------------------------------
@@ -202,18 +226,19 @@ void displayStatus() {
 //------------------------------------------------------------------------------
 bool heloCrashed(int altitude) {
 
-    if (altitude < 0) {
-        if (altitude >= BUMPY_LANDING) {
-            cout << "Bumpy landing! ";
-            flight::helo.goLand();
-            flight::crashed = false;
+    if (altitude < 0) 
+    {
+        if (altitude >= BUMPY_LANDING)
+        {
+            std::cout << "Bumpy landing! ";
+            fly::helo.goLand();
+            fly::crashed = false;
         }
-        else {
-            cout << "You crashed! ";
-            flight::crashed = true;
+        else
+        {
+            std::cout << "You crashed! ";
+            fly::crashed = true;
         }
-
-        cout << "You dropped " << abs(altitude) << " feet too many. ";
     }
-    return flight::crashed;
+    return fly::crashed;
 }
