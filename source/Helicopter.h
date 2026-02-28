@@ -22,6 +22,7 @@ public:
 
 	// returns distance flown so far
 	int getDistance() const;
+
 	// puts altitude and distance in reference params
 	void getPosition(int&, int&);
 
@@ -34,5 +35,8 @@ public:
 	
 	// resets altitude to 0
 	void goLand();
+
+	// resets distance to 0
+	void resetDistance();
 };
 #endif // HELICOPTER_H
