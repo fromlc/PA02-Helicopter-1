@@ -1,0 +1,70 @@
+PA02 Helicopter app: Comments on Student Code
+
+No using namespace std.
+	It's a best practice to specify the namespace.
+	
+Only #include the header files you need.
+	If the file has no std::couts in it, don't #include <iostream>
+	
+Don't put #pragma once in .cpp files, only in header files (.h or .hpp)	
+	
+Make your getter (observer) member functions const.
+
+One student used static functions and variables in the app code.
+	What does it mean for a function or variable to be declared static?
+
+Some of you passed your Helicopter instance by reference, good.
+	C++ default is to pass by value, which copies data.
+	You should always pass data structures by reference.
+	You can pass by const reference to protect the data.
+
+Pass strings by const reference:
+	char getCommand(const std::string& menuStr);
+
+Use constants at the top of your app code.
+	Constant names should be ALL CAPS.
+	Name related constants with the same prefix.
+	Like this:
+		constexpr int DISTANCE_UP = 100;
+		constexpr int DISTANCE_DOWN = -51;
+		constexpr int DISTANCE_FORWARD = -200;
+		constexpr int ERROR_OPENING_FILE = -1;
+		constexpr int ERROR_BAD_COMMAND = -2;
+	
+Use constants NOT literal numbers in cout console messages.
+	When you want to change behaviors, you change the constants.
+	You won't have to search for all the literal numbers you need to change.
+	Easier, less bugs.
+
+Use type char for one-character commands.
+	char is easier to work with than std::string.
+	Using string comparisons is much slower.
+	
+A word on app design with classes:
+
+	Your class Helicopter is responsible for making behaviors available.
+
+	Your app code helo_app_1.cpp is responsible for creating behaviors
+		and behavior sequences from what the class offers.
+	
+	You should not have cout's in your class code.
+	You should not have specific altitude gains or drops in your class code.
+		These belong in constants at the top of your app code.
+
+Use toupper() or tolower() for simpler expressions and better performance.
+	if (userInput == 'Q' || userInput == 'q')
+vs.	
+	userInput = toupper(userInput);
+	if (userInput == 'Q');
+
+Class declaration and definition filenames must have the same name as the class.
+
+Other files should use the specified name.
+	University autograders will dock for this, so I will too from now on.
+
+Use file and function comment headers. 
+	Each one is worth one point	up to a max of coding standard points.
+	It's OK to use one comment header for a group of functions with same purpose.
+		For instance, all command handlers.
+	
+	
