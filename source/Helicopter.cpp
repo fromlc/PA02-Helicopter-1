@@ -23,7 +23,8 @@ int Helicopter::getDistance() const { return distance; }
 //------------------------------------------------------------------------------
 // puts altitude and distance in reference parameters
 //------------------------------------------------------------------------------
-void Helicopter::getPosition(int& _altitude, int& _distance) {
+void Helicopter::getPosition(int& _altitude, int& _distance)
+{
 	_altitude = altitude;
 	_distance = distance;
 }
@@ -32,7 +33,8 @@ void Helicopter::getPosition(int& _altitude, int& _distance) {
 // - increases altitude by absolute passed value
 // - returns current altitude 
 //------------------------------------------------------------------------------
-int Helicopter::goUp(int incAltitude) {
+int Helicopter::goUp(int incAltitude)
+{
 	altitude += abs(incAltitude);
 	return altitude;
 }
@@ -41,7 +43,8 @@ int Helicopter::goUp(int incAltitude) {
 // - decreases altitude by absolute passed value
 // - returns current altitude 
 //------------------------------------------------------------------------------
-int Helicopter::goDown(int decAltitude) {
+int Helicopter::goDown(int decAltitude)
+{
 	if (altitude) {
 		altitude -= abs(decAltitude);
 	}
@@ -52,7 +55,8 @@ int Helicopter::goDown(int decAltitude) {
 // - increases altitude by absolute passed value
 // - returns distance flown so far
 //------------------------------------------------------------------------------
-int Helicopter::goForward(int incDistance) {
+int Helicopter::goForward(int incDistance)
+{
 	distance += abs(incDistance);
 	return distance;
 }

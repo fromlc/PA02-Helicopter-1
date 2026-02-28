@@ -7,7 +7,8 @@
 //------------------------------------------------------------------------------
 // Helicopter
 //------------------------------------------------------------------------------
-class Helicopter {
+class Helicopter 
+{
 private:
 	int altitude;
 	int distance;
@@ -18,6 +19,7 @@ public:
 
 	// returns current altitude
 	int getAltitude() const;
+
 	// returns distance flown so far
 	int getDistance() const;
 	// puts altitude and distance in reference params

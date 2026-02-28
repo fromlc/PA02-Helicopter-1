@@ -134,6 +134,14 @@ void doHeloCommand(char cmd)
 //------------------------------------------------------------------------------
 void heloUp() 
 {
+    // OO design tip
+    
+    // traditional getter/setter calls to change altitude:
+
+    //int alt = fly::helo.getAltitude();
+    //fly::helo.setAltitude(alt + ALTITUDE_GAIN);
+
+    // Helicopter's goUp() member function changes altitude with one call :-)
     fly::helo.goUp(ALTITUDE_GAIN);
 }
 
