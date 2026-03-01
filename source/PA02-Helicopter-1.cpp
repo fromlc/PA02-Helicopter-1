@@ -89,7 +89,7 @@ void initFlight()
     std::cout << "If you drop too much altitude or quit in midair, ";
     std::cout << "your Huey will crash!\n\n";
 
-    std::cout << "Starting Huey flight simulation. ";
+    std::cout << "Starting Huey flight simulation.\n";
     displayStatus();
 }
 
@@ -177,6 +177,7 @@ void heloLand()
     else
     {
         fly::helo.goLand();
+        std::cout << "Nice landing!\n";
         fly::leftGround = false;
     }
 }
@@ -222,15 +223,10 @@ void handleCrash(int altitude)
     if (altitude < 0) 
     {
         if (fly::quit)
-            std::cout << "You parachuted out and your helo crashed! ";
+            std::cout << "You parachuted out and your helo crashed!\n";
         else
-            std::cout << "You crashed! ";
+            std::cout << "You crashed!\n";
 
         fly::crashed = true;
-    }
-    else if (altitude == 0 && fly::leftGround)
-    {
-        std::cout << "Nice landing!";
-        fly::crashed = false;
     }
 }
