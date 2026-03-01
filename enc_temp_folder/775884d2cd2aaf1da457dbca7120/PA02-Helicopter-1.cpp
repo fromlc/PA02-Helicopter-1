@@ -84,7 +84,7 @@ void initFlight()
     std::cout << "'" << CMD_LAND << "' lands and your Huey can take off again.\n";
     std::cout << "'" << CMD_QUIT << "' quits when you're done flying.\n\n";
 
-    std::cout << "Commands can be in upper or lower case.\n\n";
+    std::cout << "Commands can be upper or lower case.\n\n";
 
     std::cout << "If you drop too much altitude or quit in midair, ";
     std::cout << "your Huey will crash!\n\n";
