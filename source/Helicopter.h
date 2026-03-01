@@ -4,6 +4,8 @@
 #ifndef HELICOPTER_H
 #define HELICOPTER_H
 
+#include <string>
+
 //------------------------------------------------------------------------------
 // Helicopter
 //------------------------------------------------------------------------------
@@ -12,6 +14,7 @@ class Helicopter
 private:
 	int altitude;
 	int distance;
+	std::string name;
 
 public:
 	// constructor
@@ -25,6 +28,12 @@ public:
 
 	// puts altitude and distance in reference params
 	void getPosition(int&, int&);
+
+	// returns reference to helo name string
+	const std::string& getName() const;
+
+	// sets helo name string
+	void setName(const std::string&);
 
 	// increases altitude by absolute passed value, returns current altitude
 	int goUp(int);
