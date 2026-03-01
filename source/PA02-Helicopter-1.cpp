@@ -22,6 +22,8 @@ constexpr int DISTANCE_GAIN = 200;
 
 const std::string APP_MENU =
     "A)scend, D)escend, F)orward, V)land, Q)uit ? ";
+const std::string HELO_NAME = "Huey";
+
 constexpr char CMD_ASCEND   = 'A';
 constexpr char CMD_DESCEND  = 'D';
 constexpr char CMD_FORWARD  = 'F';
@@ -73,7 +75,12 @@ int main()
 //------------------------------------------------------------------------------
 void initFlight() 
 {
-    std::cout << "\nWelcome! Your Huey simulation awaits.\n";
+    //#TODO make name random
+    fly::helo.setName(HELO_NAME);
+
+    std::cout << "\nWelcome! You're flying a " 
+        << fly::helo.getName() << " today.";
+    std::cout << "\nYour flight simulation awaits.\n";
     std::cout << "\nControl your flight with these commands:\n\n";
     std::cout << "'" << CMD_ASCEND << "' increases altitude by " 
         << ALTITUDE_GAIN << " feet,\n";
@@ -81,15 +88,16 @@ void initFlight()
         << ALTITUDE_DROP << " feet,\n";
     std::cout << "'" << CMD_FORWARD << "' flies forward "
         << DISTANCE_GAIN << " yards.\n";
-    std::cout << "'" << CMD_LAND << "' lands and your Huey can take off again.\n";
+    std::cout << "'" << CMD_LAND << "' lands and your " 
+        << fly::helo.getName() << " can take off again.\n";
     std::cout << "'" << CMD_QUIT << "' quits when you're done flying.\n\n";
 
     std::cout << "Commands can be in upper or lower case.\n\n";
 
     std::cout << "If you drop too much altitude or quit in midair, ";
-    std::cout << "your Huey will crash!\n\n";
+    std::cout << "your " << fly::helo.getName() << " will crash!\n\n";
 
-    std::cout << "Starting Huey flight simulation.\n";
+    std::cout << "Starting " << fly::helo.getName() << " flight simulation.\n";
     displayStatus();
 }
 
