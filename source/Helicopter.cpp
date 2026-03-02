@@ -39,7 +39,6 @@ const std::string& Helicopter::getName() const { return name; }
 //------------------------------------------------------------------------------
 void Helicopter::setName(const std::string& heloName) { name = heloName; };
 
-
 //------------------------------------------------------------------------------
 // - increases altitude by absolute passed value
 // - returns current altitude 

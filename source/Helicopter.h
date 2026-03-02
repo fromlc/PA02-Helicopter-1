@@ -31,7 +31,6 @@ public:
 
 	// returns reference to helo name string
 	const std::string& getName() const;
-
 	// sets helo name string
 	void setName(const std::string&);
 
