@@ -72,6 +72,9 @@ int main()
         keepFlying = doHeloCommand(getPilotCommand());
         bool userQuit = !keepFlying;
         displayStatus(userQuit);
+
+        if (!fly::helo.inFlight())
+            fly::helo.resetDistance();
     }
     std::cout << "Goodbye!\n\n";
 }
@@ -190,9 +193,7 @@ void heloLand()
         std::cout << "You're already on the ground!\n";
 
     else
-    {
         fly::helo.goLand();
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -204,7 +205,7 @@ void heloQuit()
     int altitude = fly::helo.getAltitude();
     
     if (altitude > 0)
-        fly::helo.goDown(altitude + 1);
+        fly::helo.goDown(altitude - BUMPY_LANDING + 1);
 }
 
 //------------------------------------------------------------------------------
@@ -235,7 +236,4 @@ void displayStatus(bool userQuit)
 
     std::cout << "Altitude: " << altitude << " feet\n";
     std::cout << "Distance flown: " << fly::helo.getDistance() << " yards.\n\n";
-
-    if (!fly::helo.inFlight())
-        fly::helo.resetDistance();
 }
