@@ -29,6 +29,9 @@ void Helicopter::getPosition(int& _altitude, int& _distance)
 	_distance = distance;
 }
 
+// returns true if altitude > 0, false otherwise
+bool Helicopter::inFlight() { return altitude > 0; }
+
 //------------------------------------------------------------------------------
 // returns reference to helo name string
 //------------------------------------------------------------------------------

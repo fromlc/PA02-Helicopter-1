@@ -41,7 +41,6 @@ constexpr char CMD_QUIT     = 'Q';
 namespace fly
 {
     Helicopter helo;
-    bool leftGround = false;
 }
 
 //------------------------------------------------------------------------------
@@ -150,9 +149,6 @@ void heloUp()
 
     // Helicopter's goUp() member function changes altitude with one call :-)
     fly::helo.goUp(ALTITUDE_GAIN);
-
-    // for correct status output
-    fly::leftGround = true;
 }
 
 //------------------------------------------------------------------------------
@@ -188,14 +184,13 @@ void heloForward()
 //------------------------------------------------------------------------------
 void heloLand() 
 {
-    if (!fly::helo.getAltitude()) 
+    if (!fly::helo.inFlight()) 
         std::cout << "You're already on the ground!\n";
 
     else
     {
         fly::helo.goLand();
         std::cout << "Nice landing!\n";
-        fly::leftGround = false;
     }
 }
 
@@ -233,6 +228,6 @@ void displayStatus(bool userQuit)
     std::cout << "Altitude: " << altitude << " feet\n";
     std::cout << "Distance flown: " << fly::helo.getDistance() << " yards.\n\n";
 
-    if (!fly::leftGround)
+    if (!fly::helo.inFlight())
         fly::helo.resetDistance();
 }

@@ -29,6 +29,9 @@ public:
 	// puts altitude and distance in reference params
 	void getPosition(int&, int&);
 
+	// returns true if altitude > 0, false otherwise
+	bool inFlight();
+
 	// returns reference to helo name string
 	const std::string& getName() const;
 	// sets helo name string
