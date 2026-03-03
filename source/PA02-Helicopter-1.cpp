@@ -25,6 +25,8 @@ constexpr int ALTITUDE_GAIN = 100;
 constexpr int ALTITUDE_DROP = 51;
 constexpr int DISTANCE_GAIN = 200;
 
+constexpr int BUMPY_LANDING = -1;
+
 const std::string APP_MENU =
     "A)scend, D)escend, F)orward, V)land, Q)uit ? ";
 const std::string HELO_NAME = "Huey";
@@ -48,7 +50,7 @@ namespace fly
 //------------------------------------------------------------------------------
 void initFlight();
 char getPilotCommand();
-bool doHeloCommand(char);
+bool doHeloCommand(char userCmd);
 void heloUp();
 bool heloDown();        // returns false on crash, true otherwise
 void heloForward();
@@ -164,7 +166,7 @@ bool heloDown()
     }
     fly::helo.goDown(ALTITUDE_DROP);
 
-    return (fly::helo.getAltitude() >= 0);
+    return (fly::helo.getAltitude() >= BUMPY_LANDING);
 }
 
 //------------------------------------------------------------------------------
@@ -190,7 +192,6 @@ void heloLand()
     else
     {
         fly::helo.goLand();
-        std::cout << "Nice landing!\n";
     }
 }
 
@@ -214,16 +215,23 @@ void displayStatus(bool userQuit)
 {
     int altitude = fly::helo.getAltitude();
 
-    if (altitude < 0)
+    if (altitude > 0)
     {
         if (userQuit)
             std::cout << "You parachuted out and your helo crashed!\n";
-        else
-            std::cout << "You crashed!\n";
     }
-#ifndef LC_DEBUG
+    
+    else if (altitude == 0)
+        std::cout << "Nice landing!\n";
+
+    else if (altitude < BUMPY_LANDING)
+        std::cout << "You crashed!\n";
+    
     else
-#endif // LC_DEBUG
+    {
+        std::cout << "Whoa! Bumpy landing!\n";
+        fly::helo.goLand();
+    }
 
     std::cout << "Altitude: " << altitude << " feet\n";
     std::cout << "Distance flown: " << fly::helo.getDistance() << " yards.\n\n";
