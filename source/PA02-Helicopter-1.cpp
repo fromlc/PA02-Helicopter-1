@@ -122,7 +122,7 @@ char getPilotCommand()
 
 //------------------------------------------------------------------------------
 // - executes passed command
-// - returns false on 
+// - returns false on quit or crash, true otherwise
 //------------------------------------------------------------------------------
 bool doHeloCommand(char cmd) 
 {
