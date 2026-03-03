@@ -16,6 +16,11 @@
 //------------------------------------------------------------------------------
 // constants
 //------------------------------------------------------------------------------
+// debug mode reports negative altitude value after crash 
+//#define LC_DEBUG
+
+constexpr bool QUIT_FLYING = true;
+
 constexpr int ALTITUDE_GAIN = 100;
 constexpr int ALTITUDE_DROP = 51;
 constexpr int DISTANCE_GAIN = 200;
@@ -37,7 +42,6 @@ namespace fly
 {
     Helicopter helo;
     bool leftGround = false;
-    bool quit = false;
 }
 
 //------------------------------------------------------------------------------
@@ -45,13 +49,13 @@ namespace fly
 //------------------------------------------------------------------------------
 void initFlight();
 char getPilotCommand();
-void doHeloCommand(char);
+bool doHeloCommand(char);
 void heloUp();
 void heloDown();
 void heloForward();
 void heloLand();
-void quitFlight();
-void displayStatus();
+void heloQuit();
+void displayStatus(bool userQuit);
 
 //------------------------------------------------------------------------------
 // entry point
@@ -60,10 +64,12 @@ int main()
 {
     initFlight();
 
-    while (!fly::quit)
+    bool keepFlying = true;
+    while (keepFlying)
     {
-        doHeloCommand(getPilotCommand());
-        displayStatus();
+        keepFlying = doHeloCommand(getPilotCommand());
+        bool userQuit = !keepFlying;
+        displayStatus(userQuit);
     }
     std::cout << "Goodbye!\n\n";
 }
@@ -96,7 +102,7 @@ void initFlight()
     std::cout << "your " << fly::helo.getName() << " will crash!\n\n";
 
     std::cout << "Starting " << fly::helo.getName() << " flight simulation.\n";
-    displayStatus();
+    displayStatus(!QUIT_FLYING);
 }
 
 //------------------------------------------------------------------------------
@@ -116,15 +122,15 @@ char getPilotCommand()
 // - executes passed command
 // - returns command result: true on success, false on fail
 //------------------------------------------------------------------------------
-void doHeloCommand(char cmd) 
+bool doHeloCommand(char cmd) 
 {
     switch (cmd) 
     {
-    case CMD_ASCEND:    heloUp(); break;
-    case CMD_DESCEND:   heloDown(); break;
-    case CMD_FORWARD:   heloForward(); break;
-    case CMD_LAND:      heloLand(); break;
-    case CMD_QUIT:      quitFlight(); break;
+    case CMD_ASCEND:    heloUp(); return true;
+    case CMD_DESCEND:   heloDown(); return true;
+    case CMD_FORWARD:   heloForward(); return true;
+    case CMD_LAND:      heloLand(); return true;
+    case CMD_QUIT:      heloQuit(); return false;
     default:            std::cout << "Sorry, I don't know that command.\n";
     }
 }
@@ -189,40 +195,36 @@ void heloLand()
 }
 
 //------------------------------------------------------------------------------
-// terminates flight with crash
+// - terminates flight
+// - forces crash if helicopter is in the air
 //------------------------------------------------------------------------------
-void quitFlight() 
+void heloQuit() 
 {
     int altitude = fly::helo.getAltitude();
     
-    // force a crash if helicopter is in the air
     if (altitude > 0)
-    {
-        fly::quit = true;
         fly::helo.goDown(altitude + 1);
-    }
-    fly::quit = true;
 }
 
 //------------------------------------------------------------------------------
 // - displays helicopter status and distance flown
 // - if helicopter has landed, reset distance flown to 0
 //------------------------------------------------------------------------------
-void displayStatus()
+void displayStatus(bool userQuit)
 {
     int altitude = fly::helo.getAltitude();
 
     if (altitude < 0)
     {
-        if (fly::quit)
+        if (userQuit)
             std::cout << "You parachuted out and your helo crashed!\n";
         else
-        {
             std::cout << "You crashed!\n";
-            fly::quit = true;
-        }
     }
-    
+#ifndef LC_DEBUG
+    else
+#endif // LC_DEBUG
+
     std::cout << "Altitude: " << altitude << " feet\n";
     std::cout << "Distance flown: " << fly::helo.getDistance() << " yards.\n\n";
 
