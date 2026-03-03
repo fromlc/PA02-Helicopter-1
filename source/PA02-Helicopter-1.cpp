@@ -36,7 +36,6 @@ constexpr char CMD_QUIT     = 'Q';
 namespace fly
 {
     Helicopter helo;
-    bool crashed = false;
     bool leftGround = false;
     bool quit = false;
 }
@@ -53,7 +52,6 @@ void heloForward();
 void heloLand();
 void quitFlight();
 void displayStatus();
-void handleCrash(int);
 
 //------------------------------------------------------------------------------
 // entry point
@@ -62,7 +60,7 @@ int main()
 {
     initFlight();
 
-    while (!fly::crashed && !fly::quit)
+    while (!fly::quit)
     {
         doHeloCommand(getPilotCommand());
         displayStatus();
@@ -196,9 +194,11 @@ void heloLand()
 void quitFlight() 
 {
     int altitude = fly::helo.getAltitude();
+    
+    // force a crash if helicopter is in the air
     if (altitude > 0)
     {
-        fly::crashed = true;
+        fly::quit = true;
         fly::helo.goDown(altitude + 1);
     }
     fly::quit = true;
@@ -212,29 +212,20 @@ void displayStatus()
 {
     int altitude = fly::helo.getAltitude();
 
-    handleCrash(altitude);
+    if (altitude < 0)
+    {
+        if (fly::quit)
+            std::cout << "You parachuted out and your helo crashed!\n";
+        else
+        {
+            std::cout << "You crashed!\n";
+            fly::quit = true;
+        }
+    }
     
     std::cout << "Altitude: " << altitude << " feet\n";
     std::cout << "Distance flown: " << fly::helo.getDistance() << " yards.\n\n";
 
     if (!fly::leftGround)
         fly::helo.resetDistance();
-}
-
-//------------------------------------------------------------------------------
-// - handles crash conditions
-// - updates helo altitude
-// - returns true if helo crashed, false otherwise
-//------------------------------------------------------------------------------
-void handleCrash(int altitude)
-{
-    if (altitude < 0) 
-    {
-        if (fly::quit)
-            std::cout << "You parachuted out and your helo crashed!\n";
-        else
-            std::cout << "You crashed!\n";
-
-        fly::crashed = true;
-    }
 }
