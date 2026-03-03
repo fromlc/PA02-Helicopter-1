@@ -51,7 +51,7 @@ void initFlight();
 char getPilotCommand();
 bool doHeloCommand(char);
 void heloUp();
-void heloDown();
+bool heloDown();        // returns false on crash, true otherwise
 void heloForward();
 void heloLand();
 void heloQuit();
@@ -62,6 +62,7 @@ void displayStatus(bool userQuit);
 //------------------------------------------------------------------------------
 int main() 
 {
+    // display app banner, instructions, status
     initFlight();
 
     bool keepFlying = true;
@@ -120,14 +121,14 @@ char getPilotCommand()
 
 //------------------------------------------------------------------------------
 // - executes passed command
-// - returns command result: true on success, false on fail
+// - returns false on 
 //------------------------------------------------------------------------------
 bool doHeloCommand(char cmd) 
 {
     switch (cmd) 
     {
     case CMD_ASCEND:    heloUp(); return true;
-    case CMD_DESCEND:   heloDown(); return true;
+    case CMD_DESCEND:   return heloDown();
     case CMD_FORWARD:   heloForward(); return true;
     case CMD_LAND:      heloLand(); return true;
     case CMD_QUIT:      heloQuit(); return false;
@@ -155,15 +156,19 @@ void heloUp()
 }
 
 //------------------------------------------------------------------------------
-// goes down
+// - goes down
+// - returns false on crash, true otherwise
 //------------------------------------------------------------------------------
-void heloDown() 
+bool heloDown() 
 {
-    if (!fly::helo.getAltitude()) 
+    if (!fly::helo.getAltitude())
+    {
         std::cout << "You're already on the ground!\n";
+        return true;
+    }
+    fly::helo.goDown(ALTITUDE_DROP);
 
-    else
-        fly::helo.goDown(ALTITUDE_DROP);
+    return (fly::helo.getAltitude() >= 0);
 }
 
 //------------------------------------------------------------------------------
