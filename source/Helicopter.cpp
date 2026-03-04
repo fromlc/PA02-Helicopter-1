@@ -8,7 +8,12 @@
 //------------------------------------------------------------------------------
 // constructor
 //------------------------------------------------------------------------------
-Helicopter::Helicopter() { altitude = distance = 0; }
+Helicopter::Helicopter()
+	: altitude(0)
+	, distance(0)
+	, totalDistance(0)
+	, legsFlown(0)
+{ }
 
 //------------------------------------------------------------------------------
 // returns current altitude
@@ -21,6 +26,11 @@ int Helicopter::getAltitude() const { return altitude; }
 int Helicopter::getDistance() const { return distance; }
 
 //------------------------------------------------------------------------------
+// returns total distance flown
+//------------------------------------------------------------------------------
+int Helicopter::getTotalDistance() const { return totalDistance; }
+
+//------------------------------------------------------------------------------
 // puts altitude and distance in reference parameters
 //------------------------------------------------------------------------------
 void Helicopter::getPosition(int& _altitude, int& _distance)
@@ -29,7 +39,14 @@ void Helicopter::getPosition(int& _altitude, int& _distance)
 	_distance = distance;
 }
 
+//------------------------------------------------------------------------------
+// returns flight segments completed
+//------------------------------------------------------------------------------
+int Helicopter::getLegsFlown() const { return legsFlown; }
+
+//------------------------------------------------------------------------------
 // returns true if altitude > 0, false otherwise
+//------------------------------------------------------------------------------
 bool Helicopter::inFlight() { return altitude > 0; }
 
 //------------------------------------------------------------------------------
@@ -70,16 +87,27 @@ int Helicopter::goDown(int decAltitude)
 //------------------------------------------------------------------------------
 int Helicopter::goForward(int incDistance)
 {
-	distance += abs(incDistance);
+	incDistance = abs(incDistance);
+	
+	distance += incDistance;
+
+	// track total distance flown
+	totalDistance += incDistance;
+
 	return distance;
 }
 
 //------------------------------------------------------------------------------
 // resets altitude to 0
 //------------------------------------------------------------------------------
-void Helicopter::goLand() { altitude = 0; }
+void Helicopter::goLand() { altitude = 0; legsFlown++; }
 
 //------------------------------------------------------------------------------
 // resets distance to 0
 //------------------------------------------------------------------------------
 void Helicopter::resetDistance() { distance = 0; }
+
+//------------------------------------------------------------------------------
+// adds distance flown since liftoff to total distance flown
+//------------------------------------------------------------------------------
+void Helicopter::updateTotalDistance(int legDist) { totalDistance += legDist; }

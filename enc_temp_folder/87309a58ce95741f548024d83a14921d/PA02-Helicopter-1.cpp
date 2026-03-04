@@ -256,6 +256,6 @@ void displayStatus(bool userQuit)
 	std::cout << "Distance flown since liftoff: " 
 		<< fly::helo.getDistance() << " yards.\n";
 	std::cout << "Total distance flown: " << fly::helo.getTotalDistance() << " yards.\n";
-	std::cout << "Flight segments completed: " << fly::helo.getLegsFlown() << "\n\n";
+	std::cout << "Flight segments completed: " << fly::helo.getLegsFlown() << ".\n\n";
 
 }
