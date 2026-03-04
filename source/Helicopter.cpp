@@ -62,6 +62,6 @@ int Helicopter::goForward(int incDistance)
 }
 
 //------------------------------------------------------------------------------
-// resets altitude to 0
+// resets altitude and distance to 0 
 //------------------------------------------------------------------------------
-void Helicopter::goLand() { altitude = 0; }
+void Helicopter::goLand() { altitude = distance = 0; }
