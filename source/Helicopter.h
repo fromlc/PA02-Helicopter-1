@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// Helicopter.cpp : class declaration
+// Helicopter.h : class declaration
 //------------------------------------------------------------------------------
 #ifndef HELICOPTER_H
 #define HELICOPTER_H
