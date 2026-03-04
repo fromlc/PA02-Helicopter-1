@@ -14,6 +14,7 @@
 //------------------------------------------------------------------------------
 
 #include "Helicopter.h"
+#include "ansi_colors.h"
 
 #include <iostream>
 
@@ -76,20 +77,22 @@ int main()
 	// display app banner, instructions, status
 	initFlight();
 
-	bool userQuit = false;
-	while (!userQuit)
+	bool keepFlying = true;
+	while (keepFlying)
 	{
 		// loop until quit command
-		userQuit = !doHeloCommand(getPilotCommand());
+		keepFlying = doHeloCommand(getPilotCommand());
 
 		// context-based console output
-		displayStatus(userQuit);
+		displayStatus(keepFlying);
 
 		// set distance flown to 0 when helicopter is on the ground
 		if (!fly::helo.inFlight())
 			fly::helo.resetDistance();
 	}
-	std::cout << "Goodbye!\n\n";
+	std::cout << COLOR_FG_YELLOW
+		<< "Goodbye!\n\n"
+		<< COLOR_RESET;
 }
 
 //------------------------------------------------------------------------------
@@ -100,26 +103,33 @@ void initFlight()
 	//#TODO make name random
 	fly::helo.setName(HELO_NAME);
 
+	std::cout << COLOR_FG_YELLOW;
 	std::cout << "\nWelcome! You're flying a "
 		<< fly::helo.getName() << " today.";
-	std::cout << "\nYour flight simulation awaits.\n";
 	std::cout << "\nControl your flight with these commands:\n\n";
-	std::cout << "'" << CMD_ASCEND << "' increases altitude by "
-		<< ALTITUDE_GAIN << " feet,\n";
-	std::cout << "'" << CMD_DESCEND << "' decreases altitude by "
-		<< ALTITUDE_DROP << " feet,\n";
-	std::cout << "'" << CMD_FORWARD << "' flies forward "
-		<< DISTANCE_GAIN << " yards.\n";
-	std::cout << "'" << CMD_LAND << "' lands and your "
-		<< fly::helo.getName() << " can take off again.\n";
-	std::cout << "'" << CMD_QUIT << "' quits when you're done flying.\n\n";
 
+	std::cout << COLOR_RESET << CMD_ASCEND << COLOR_FG_CYAN
+		<< " increases altitude by " << ALTITUDE_GAIN << " feet,\n";
+	std::cout << COLOR_RESET << CMD_DESCEND << COLOR_FG_CYAN
+		<< " decreases altitude by " << ALTITUDE_DROP << " feet,\n";
+	std::cout << COLOR_RESET << CMD_FORWARD << COLOR_FG_CYAN
+		<< " flies forward " << DISTANCE_GAIN << " yards.\n";
+	std::cout << COLOR_RESET << CMD_LAND << COLOR_FG_CYAN
+		<< " lands and your " << fly::helo.getName() 
+		<< " can take off again.\n";
+	std::cout << COLOR_RESET << CMD_QUIT << COLOR_FG_CYAN
+		<< " quits when you're done flying.\n\n";
+
+	std::cout << COLOR_FG_YELLOW;
 	std::cout << "Commands can be in upper or lower case.\n\n";
 
 	std::cout << "If you drop too much altitude or quit in midair, ";
 	std::cout << "your " << fly::helo.getName() << " will crash!\n\n";
 
-	std::cout << "Starting " << fly::helo.getName() << " flight simulation.\n";
+	std::cout << COLOR_FG_CYAN
+		<< "Starting " << fly::helo.getName() << " flight simulation.\n"
+		<< COLOR_RESET;
+
 	displayStatus(!QUIT_FLYING);
 }
 
@@ -129,7 +139,7 @@ void initFlight()
 //------------------------------------------------------------------------------
 char getPilotCommand()
 {
-	std::cout << APP_MENU;
+	std::cout << COLOR_FG_CYAN << APP_MENU << COLOR_RESET;
 
 	char cmd;
 	std::cin >> cmd;
@@ -149,9 +159,11 @@ bool doHeloCommand(char cmd)
 	case CMD_FORWARD:   heloForward(); return true;
 	case CMD_LAND:      heloLand(); return true;
 	case CMD_QUIT:      return false;
-
-	default:            std::cout << "Sorry, I don't know that command.\n";
 	}
+
+	std::cout << COLOR_FG_YELLOW 
+		<< "Sorry, I don't know that command.\n"
+		<< COLOR_RESET;
 
 	return true;
 }
@@ -180,7 +192,10 @@ bool heloDown()
 {
 	if (!fly::helo.getAltitude())
 	{
-		std::cout << "You're already on the ground!\n";
+		std::cout << COLOR_FG_YELLOW
+			<< "You're already on the ground!\n"
+			<< COLOR_RESET;
+
 		return true;
 	}
 	fly::helo.goDown(ALTITUDE_DROP);
@@ -194,7 +209,9 @@ bool heloDown()
 void heloForward()
 {
 	if (!fly::helo.getAltitude())
-		std::cout << "You're still on the ground!\n";
+		std::cout << COLOR_FG_YELLOW
+		<< "You're still on the ground!\n"
+		<< COLOR_RESET;
 
 	else
 		fly::helo.goForward(DISTANCE_GAIN);
@@ -206,7 +223,9 @@ void heloForward()
 void heloLand()
 {
 	if (!fly::helo.inFlight())
-		std::cout << "You're already on the ground!\n";
+		std::cout << COLOR_FG_YELLOW
+		<< "You're already on the ground!\n"
+		<< COLOR_RESET;
 
 	else
 	{
@@ -230,32 +249,38 @@ void heloQuit()
 //------------------------------------------------------------------------------
 // - displays helicopter status and distance flown
 //------------------------------------------------------------------------------
-void displayStatus(bool userQuit)
+void displayStatus(bool keepFlying)
 {
 	int altitude = fly::helo.getAltitude();
 
-	if (userQuit)
+	if (!keepFlying && altitude > 0)
 	{
-		if (altitude > 0)
-			std::cout << "You parachuted out and your helo crashed!\n";
-	
-		altitude = 0;
-	}
-	else if (altitude < BUMPY_LANDING)
-		std::cout << "You crashed!\n";
+		std::cout << COLOR_FG_RED
+			<< "You parachuted out and your helo crashed!\n"
+			<< COLOR_RESET;
 
+		// display correct altitude below
+		altitude = -altitude;
+	}
+	else if (!keepFlying && altitude < BUMPY_LANDING)
+	{
+		std::cout << COLOR_FG_RED
+			<< "You crashed!\n"
+			<< COLOR_RESET;
+	}
 	else if (altitude < 0)
 	{
-		std::cout << "Whoa! Bumpy landing!\n";
+		std::cout << COLOR_FG_YELLOW
+			<< "Whoa! Bumpy landing!\n"
+			<< COLOR_RESET;
+
+		// this counts as a landing
 		fly::helo.goLand();
 	}
 
-	if (altitude > 0)
-		std::cout << "Altitude: " << altitude << " feet\n";
-
+	std::cout << "Altitude: " << altitude << " feet\n";
 	std::cout << "Distance flown since liftoff: " 
 		<< fly::helo.getDistance() << " yards.\n";
 	std::cout << "Total distance flown: " << fly::helo.getTotalDistance() << " yards.\n";
 	std::cout << "Flight segments completed: " << fly::helo.getLegsFlown() << "\n\n";
-
 }
