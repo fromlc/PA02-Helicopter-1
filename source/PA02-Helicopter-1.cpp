@@ -1,12 +1,16 @@
 //------------------------------------------------------------------------------
 // PA02-Helicopter-1.cpp : app code for helicopter flight
 // 
-// Accepts commands U)p, D)own, F)orward, X)lands, Q)uit
-//      - Up increases altitude by 100 feet
-//      - Down decreases altitude by 101 feet
-//      - Forward increases distance flown by 100 feet
+// Accepts commands U)p, D)own, F)orward, V)land, Q)uit
+//      - Up increases altitude by ALTITUDE_GAIN feet
+//      - Down decreases altitude by ALTITUDE_DROP feet
+//			- Negative altitude can crash the helicopter,
+//			- OR, if the resulting altitude is not lower than BUMPY_LANDING,
+//				the app reports a bumpy landing and this counts as a landing.
+//      - Forward increases distance flown by DISTANCE_GAIN yards
 //      - Land resets altitude to 0
-//      - Quit terminates app
+//      - Quit terminates the app
+//		- Crashing the helicopter terminates the app
 //------------------------------------------------------------------------------
 
 #include "Helicopter.h"
@@ -49,13 +53,19 @@ namespace fly
 // local function prototypes
 //------------------------------------------------------------------------------
 void initFlight();
+
 char getPilotCommand();
 bool doHeloCommand(char userCmd);
+
+// begin command handlers
 void heloUp();
 bool heloDown();        // returns false on crash, true otherwise
 void heloForward();
 void heloLand();
 void heloQuit();
+// end command handlers
+
+// bool parameter provides context for console output
 void displayStatus(bool userQuit);
 
 //------------------------------------------------------------------------------
@@ -216,7 +226,6 @@ void heloQuit()
 
 //------------------------------------------------------------------------------
 // - displays helicopter status and distance flown
-// - if helicopter has landed, reset distance flown to 0
 //------------------------------------------------------------------------------
 void displayStatus(bool userQuit)
 {
